@@ -160,7 +160,6 @@ Sau khi hệ thống đã chạy, bạn có thể dùng Postman để kiểm tra
     }
     Example:
     ```
-![alt text](public/register.png)
 
 ### 2. Đăng nhập
 * **Method**: `POST`
@@ -173,7 +172,6 @@ Sau khi hệ thống đã chạy, bạn có thể dùng Postman để kiểm tra
     }
     Ecample:
     ```
-    ![alt text](public/login.png)
 
 * **Kết quả**: Copy lại giá trị `token` từ response để sử dụng cho các request tiếp theo.
 
@@ -189,7 +187,6 @@ Sau khi hệ thống đã chạy, bạn có thể dùng Postman để kiểm tra
         "price": 25990000
     }
     ```
-    ![alt text](public/createproduct.png)
    
 * **Kết quả**: Copy lại giá trị `_id` của sản phẩm vừa tạo.
 
@@ -208,7 +205,6 @@ Sau khi hệ thống đã chạy, bạn có thể dùng Postman để kiểm tra
         ]
     }
     ```
- ![alt text](public/buy.png)
 
 ---
 
