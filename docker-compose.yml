@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+  # 🐇 RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - micro_network
+
+  # 🍃 MongoDB
+  mymongodb:
+    image: mongo:7.0
+    container_name: mymongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - micro_network
+
+  # 🚪 API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - AUTH_SERVICE_URL=http://auth:3000
+      - PRODUCT_SERVICE_URL=http://product:3001
+      - ORDER_SERVICE_URL=http://order:3002
+      - JWT_SECRET=mySuperSecretKey789
+      - LOG_LEVEL=debug
+    depends_on:
+      - auth
+      - order
+      - product
+    networks:
+      - micro_network
+
+  # 👤 Auth Service
+  auth:
+    build: ./auth
+    container_name: auth
+    environment:
+      - MONGODB_AUTH_URI=mongodb://mymongodb:27017/authdb
+      - JWT_SECRET=mySuperSecretKey789
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - mymongodb
+      - rabbitmq
+    ports:
+      - "3000:3000"
+    networks:
+      - micro_network
+
+  # 📦 Product Service
+  product:
+    build: ./product
+    container_name: product
+    environment:
+      - MONGODB_PRODUCT_URI=mongodb://mymongodb:27017/productdb
+      - RABBITMQ_URL=amqp://rabbitmq
+      - JWT_SECRET=mySuperSecretKey789
+    depends_on:
+      - mymongodb
+      - rabbitmq
+    ports:
+      - "3001:3001"
+    networks:
+      - micro_network
+
+  # 🧾 Order Service
+  order:
+    build: ./order
+    container_name: order
+    environment:
+      - MONGODB_ORDER_URI=mongodb://mymongodb:27017/orderdb
+      - RABBITMQ_URL=amqp://rabbitmq
+      - JWT_SECRET=mySuperSecretKey789
+    depends_on:
+      - mymongodb
+      - rabbitmq
+    ports:
+      - "3002:3002"
+    networks:
+      - micro_network
+  
+    command: sh -c "sleep 10 && npm start"
+
+volumes:
+  mongo_data:
+
+networks:
+  micro_network:
+    driver: bridge
