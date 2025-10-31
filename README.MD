@@ -192,7 +192,7 @@ Sau khi hệ thống đã chạy, bạn có thể dùng Postman để kiểm tra
 
 ### 4. Tạo đơn hàng mới
 * **Method**: `POST`
-* **URL**: `http://localhost:3000/orders/create` (Lưu ý: đường dẫn này có thể khác tùy theo code của bạn)
+* **URL**: `http://localhost:3003/products/ipa/products/buy` (Lưu ý: đường dẫn này có thể khác tùy theo code của bạn)
 * **Authorization**: Tiếp tục dùng `Bearer Token`.
 * **Body** (`raw`, `JSON`):
     ```json
